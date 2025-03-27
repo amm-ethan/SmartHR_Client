@@ -2,7 +2,7 @@ import {axiosInstance} from '@/lib/axios';
 import type {ApiResponse} from '@/services/general.services.ts';
 
 interface LoginRequest {
-    username: string;
+    email: string;
     password: string;
 }
 
