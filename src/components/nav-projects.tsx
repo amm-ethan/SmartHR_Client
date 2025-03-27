@@ -29,9 +29,9 @@ export function NavProjects({projects,}: {
                     <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild className={
                             `${matchRoute({to: item.url})
-                                ? 'bg-sidebar-accent '
+                                ? 'bg-sidebar-accent'
                                 : ''}
-                            \`}`}>
+                            `}>
                             <Link to={item.url}>
                                 <item.icon/>
                                 <span>{item.name}</span>

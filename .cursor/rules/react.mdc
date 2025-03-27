@@ -1,11 +1,11 @@
 ---
-description: rules for react-vite
+description: 
 globs: 
+alwaysApply: true
 ---
-This is react based web application.
+# react, vite, npm instructions
 
-The application is a web based application that is used to manage a restaurant.
-The application is built using react, vite, tailwind, shadcn, sonner, lucid icon, Tanstack Router, Tanstack/react-query, zod, Axios, Typescript and Redux Toolkit.
+Use react, vite, tailwind, shadcn, sonner, lucid icon, Tanstack Router, Tanstack/react-query, zod, Axios, Typescript and Redux Toolkit.
 
 When suggesting code, please use the following libraries:
 - Tanstack Router for navigation

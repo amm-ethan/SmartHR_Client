@@ -16,6 +16,9 @@ import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthDashboardImport } from './routes/_auth/dashboard'
 import { Route as AuthAccessMgmtImport } from './routes/_auth/access-mgmt'
+import { Route as AuthEmployeeMgmtOrgStructureImport } from './routes/_auth/employee-mgmt/org-structure'
+import { Route as AuthEmployeeMgmtEmployeesImport } from './routes/_auth/employee-mgmt/employees'
+import { Route as AuthEmployeeMgmtDepartmentsImport } from './routes/_auth/employee-mgmt/departments'
 
 // Create/Update Routes
 
@@ -47,6 +50,26 @@ const AuthAccessMgmtRoute = AuthAccessMgmtImport.update({
   path: '/access-mgmt',
   getParentRoute: () => AuthRoute,
 } as any)
+
+const AuthEmployeeMgmtOrgStructureRoute =
+  AuthEmployeeMgmtOrgStructureImport.update({
+    id: '/employee-mgmt/org-structure',
+    path: '/employee-mgmt/org-structure',
+    getParentRoute: () => AuthRoute,
+  } as any)
+
+const AuthEmployeeMgmtEmployeesRoute = AuthEmployeeMgmtEmployeesImport.update({
+  id: '/employee-mgmt/employees',
+  path: '/employee-mgmt/employees',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthEmployeeMgmtDepartmentsRoute =
+  AuthEmployeeMgmtDepartmentsImport.update({
+    id: '/employee-mgmt/departments',
+    path: '/employee-mgmt/departments',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -87,6 +110,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/employee-mgmt/departments': {
+      id: '/_auth/employee-mgmt/departments'
+      path: '/employee-mgmt/departments'
+      fullPath: '/employee-mgmt/departments'
+      preLoaderRoute: typeof AuthEmployeeMgmtDepartmentsImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/employee-mgmt/employees': {
+      id: '/_auth/employee-mgmt/employees'
+      path: '/employee-mgmt/employees'
+      fullPath: '/employee-mgmt/employees'
+      preLoaderRoute: typeof AuthEmployeeMgmtEmployeesImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/employee-mgmt/org-structure': {
+      id: '/_auth/employee-mgmt/org-structure'
+      path: '/employee-mgmt/org-structure'
+      fullPath: '/employee-mgmt/org-structure'
+      preLoaderRoute: typeof AuthEmployeeMgmtOrgStructureImport
+      parentRoute: typeof AuthImport
+    }
   }
 }
 
@@ -95,11 +139,17 @@ declare module '@tanstack/react-router' {
 interface AuthRouteChildren {
   AuthAccessMgmtRoute: typeof AuthAccessMgmtRoute
   AuthDashboardRoute: typeof AuthDashboardRoute
+  AuthEmployeeMgmtDepartmentsRoute: typeof AuthEmployeeMgmtDepartmentsRoute
+  AuthEmployeeMgmtEmployeesRoute: typeof AuthEmployeeMgmtEmployeesRoute
+  AuthEmployeeMgmtOrgStructureRoute: typeof AuthEmployeeMgmtOrgStructureRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAccessMgmtRoute: AuthAccessMgmtRoute,
   AuthDashboardRoute: AuthDashboardRoute,
+  AuthEmployeeMgmtDepartmentsRoute: AuthEmployeeMgmtDepartmentsRoute,
+  AuthEmployeeMgmtEmployeesRoute: AuthEmployeeMgmtEmployeesRoute,
+  AuthEmployeeMgmtOrgStructureRoute: AuthEmployeeMgmtOrgStructureRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -110,6 +160,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/access-mgmt': typeof AuthAccessMgmtRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/employee-mgmt/departments': typeof AuthEmployeeMgmtDepartmentsRoute
+  '/employee-mgmt/employees': typeof AuthEmployeeMgmtEmployeesRoute
+  '/employee-mgmt/org-structure': typeof AuthEmployeeMgmtOrgStructureRoute
 }
 
 export interface FileRoutesByTo {
@@ -118,6 +171,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/access-mgmt': typeof AuthAccessMgmtRoute
   '/dashboard': typeof AuthDashboardRoute
+  '/employee-mgmt/departments': typeof AuthEmployeeMgmtDepartmentsRoute
+  '/employee-mgmt/employees': typeof AuthEmployeeMgmtEmployeesRoute
+  '/employee-mgmt/org-structure': typeof AuthEmployeeMgmtOrgStructureRoute
 }
 
 export interface FileRoutesById {
@@ -127,13 +183,32 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_auth/access-mgmt': typeof AuthAccessMgmtRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
+  '/_auth/employee-mgmt/departments': typeof AuthEmployeeMgmtDepartmentsRoute
+  '/_auth/employee-mgmt/employees': typeof AuthEmployeeMgmtEmployeesRoute
+  '/_auth/employee-mgmt/org-structure': typeof AuthEmployeeMgmtOrgStructureRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/login' | '/access-mgmt' | '/dashboard'
+  fullPaths:
+    | '/'
+    | ''
+    | '/login'
+    | '/access-mgmt'
+    | '/dashboard'
+    | '/employee-mgmt/departments'
+    | '/employee-mgmt/employees'
+    | '/employee-mgmt/org-structure'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/access-mgmt' | '/dashboard'
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/access-mgmt'
+    | '/dashboard'
+    | '/employee-mgmt/departments'
+    | '/employee-mgmt/employees'
+    | '/employee-mgmt/org-structure'
   id:
     | '__root__'
     | '/'
@@ -141,6 +216,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/_auth/access-mgmt'
     | '/_auth/dashboard'
+    | '/_auth/employee-mgmt/departments'
+    | '/_auth/employee-mgmt/employees'
+    | '/_auth/employee-mgmt/org-structure'
   fileRoutesById: FileRoutesById
 }
 
@@ -178,7 +256,10 @@ export const routeTree = rootRoute
       "filePath": "_auth.tsx",
       "children": [
         "/_auth/access-mgmt",
-        "/_auth/dashboard"
+        "/_auth/dashboard",
+        "/_auth/employee-mgmt/departments",
+        "/_auth/employee-mgmt/employees",
+        "/_auth/employee-mgmt/org-structure"
       ]
     },
     "/login": {
@@ -190,6 +271,18 @@ export const routeTree = rootRoute
     },
     "/_auth/dashboard": {
       "filePath": "_auth/dashboard.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/employee-mgmt/departments": {
+      "filePath": "_auth/employee-mgmt/departments.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/employee-mgmt/employees": {
+      "filePath": "_auth/employee-mgmt/employees.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/employee-mgmt/org-structure": {
+      "filePath": "_auth/employee-mgmt/org-structure.tsx",
       "parent": "/_auth"
     }
   }

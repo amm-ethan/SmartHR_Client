@@ -66,21 +66,17 @@ const data = {
             icon: Users,
             items: [
                 {
-                    title: "Introduction",
-                    url: "#",
+                    title: "Employees",
+                    url: "/employee-mgmt/employees",
                 },
                 {
-                    title: "Get Started",
-                    url: "#",
+                    title: "Departments",
+                    url: "/employee-mgmt/departments",
                 },
                 {
-                    title: "Tutorials",
-                    url: "#",
-                },
-                {
-                    title: "Changelog",
-                    url: "#",
-                },
+                    title: "Organization Structure",
+                    url: "/employee-mgmt/org-structure",
+                }
             ],
         },
         {

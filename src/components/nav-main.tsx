@@ -45,12 +45,7 @@ export function NavMain({items,}: {
                     >
                         <SidebarMenuItem>
                             <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip={item.title}
-                                                   className={
-                                                       `${matchRoute({to: item.url})
-                                                           ? 'bg-sidebar-accent '
-                                                           : ''}
-                                                           \`}`}>
+                                <SidebarMenuButton tooltip={item.title}>
                                     {item.icon && <item.icon/>}
                                     <span>{item.title}</span>
                                     <ChevronRight
@@ -61,7 +56,10 @@ export function NavMain({items,}: {
                                 <SidebarMenuSub>
                                     {item.items?.map((subItem) => (
                                         <SidebarMenuSubItem key={subItem.title}>
-                                            <SidebarMenuSubButton asChild>
+                                            <SidebarMenuSubButton asChild className={
+                                                `${matchRoute({to: subItem.url})
+                                                    ? 'bg-sidebar-accent'
+                                                    : ''}`}>
                                                 <Link to={subItem.url}>
                                                     <span>{subItem.title}</span>
                                                 </Link>
