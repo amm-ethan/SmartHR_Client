@@ -44,7 +44,7 @@ const data = {
     navMain: [
         {
             title: "Leave & Attendance",
-            url: "/APPLe",
+            url: "#",
             icon: Watch,
             items: [
                 {
@@ -240,7 +240,7 @@ const data = {
         },
         {
             title: "Access Management",
-            url: "#",
+            url: "/access-mgmt",
             icon: UserCog,
         },
         {
@@ -258,14 +258,14 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
                 <SidebarHeader className="px-0 pl-1">
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton size="lg">
+                            <SidebarMenuButton size="default">
                                 <div
-                                    className="size-8 items-center justify-center">
-                                    <img src="/assets/xenoptics.ico" alt="xenoptics logo"/>
+                                    className="items-center justify-center">
+                                    <img src="/assets/logo.ico" alt="smart logo" width="32" height="32"/>
                                 </div>
-                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                                     <span className="truncate font-semibold">
-                                        Xenoptics Ltd.
+                                        Smart HR
                                     </span>
                                 </div>
                             </SidebarMenuButton>

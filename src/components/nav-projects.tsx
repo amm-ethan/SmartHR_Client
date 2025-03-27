@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar.tsx"
-import {useMatchRoute} from "@tanstack/react-router";
+import {Link, useMatchRoute} from "@tanstack/react-router";
 
 export function NavProjects({projects,}: {
     projects: {
@@ -32,10 +32,10 @@ export function NavProjects({projects,}: {
                                 ? 'bg-sidebar-accent '
                                 : ''}
                             \`}`}>
-                            <a href={item.url}>
+                            <Link to={item.url}>
                                 <item.icon/>
                                 <span>{item.name}</span>
-                            </a>
+                            </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 ))}

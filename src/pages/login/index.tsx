@@ -72,7 +72,7 @@ export function LoginPage() {
                     <div className="w-full max-w-sm rounded-xl shadow-2xl">
                         <Card>
                             <CardHeader className="text-center">
-                                <CardTitle className="text-xl"> Xenoptics HR</CardTitle>
+                                <CardTitle className="text-xl">Smart HR</CardTitle>
                                 <CardDescription>
                                     Welcome Back
                                 </CardDescription>

@@ -15,6 +15,7 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthDashboardImport } from './routes/_auth/dashboard'
+import { Route as AuthAccessMgmtImport } from './routes/_auth/access-mgmt'
 
 // Create/Update Routes
 
@@ -38,6 +39,12 @@ const IndexRoute = IndexImport.update({
 const AuthDashboardRoute = AuthDashboardImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthAccessMgmtRoute = AuthAccessMgmtImport.update({
+  id: '/access-mgmt',
+  path: '/access-mgmt',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -66,6 +73,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/access-mgmt': {
+      id: '/_auth/access-mgmt'
+      path: '/access-mgmt'
+      fullPath: '/access-mgmt'
+      preLoaderRoute: typeof AuthAccessMgmtImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/dashboard': {
       id: '/_auth/dashboard'
       path: '/dashboard'
@@ -79,10 +93,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthRouteChildren {
+  AuthAccessMgmtRoute: typeof AuthAccessMgmtRoute
   AuthDashboardRoute: typeof AuthDashboardRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthAccessMgmtRoute: AuthAccessMgmtRoute,
   AuthDashboardRoute: AuthDashboardRoute,
 }
 
@@ -92,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
+  '/access-mgmt': typeof AuthAccessMgmtRoute
   '/dashboard': typeof AuthDashboardRoute
 }
 
@@ -99,6 +116,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
+  '/access-mgmt': typeof AuthAccessMgmtRoute
   '/dashboard': typeof AuthDashboardRoute
 }
 
@@ -107,15 +125,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
+  '/_auth/access-mgmt': typeof AuthAccessMgmtRoute
   '/_auth/dashboard': typeof AuthDashboardRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/login' | '/dashboard'
+  fullPaths: '/' | '' | '/login' | '/access-mgmt' | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/dashboard'
-  id: '__root__' | '/' | '/_auth' | '/login' | '/_auth/dashboard'
+  to: '/' | '' | '/login' | '/access-mgmt' | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/login'
+    | '/_auth/access-mgmt'
+    | '/_auth/dashboard'
   fileRoutesById: FileRoutesById
 }
 
@@ -152,11 +177,16 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
+        "/_auth/access-mgmt",
         "/_auth/dashboard"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/_auth/access-mgmt": {
+      "filePath": "_auth/access-mgmt.tsx",
+      "parent": "/_auth"
     },
     "/_auth/dashboard": {
       "filePath": "_auth/dashboard.tsx",

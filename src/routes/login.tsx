@@ -1,6 +1,6 @@
 import {createFileRoute, redirect} from '@tanstack/react-router';
 import {getStoredUser,} from "@/lib/auth.tsx";
-import {LoginPage} from "@/pages/auth/login.tsx";
+import {LoginPage} from "@/pages/login";
 
 
 // Function to check authentication status
