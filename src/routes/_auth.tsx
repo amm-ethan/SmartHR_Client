@@ -2,6 +2,8 @@ import {createFileRoute, Outlet} from '@tanstack/react-router'
 import {AppSidebar} from "@/components/app-sidebar.tsx";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar.tsx";
 import {Separator} from "@/components/ui/separator.tsx";
+import {NavUser} from "@/components/nav-user.tsx";
+import NotificationBox from "@/components/notification-box.tsx";
 
 export const Route = createFileRoute('/_auth')({
     // beforeLoad: ({context, location}) => {
@@ -18,6 +20,14 @@ export const Route = createFileRoute('/_auth')({
     component: RouteComponent,
 })
 
+const data = {
+    user: {
+        name: "admin",
+        email: "admin@example.com",
+        avatar: "/avatars/avatar.png",
+    },
+}
+
 function RouteComponent() {
     return (
         <SidebarProvider>
@@ -26,12 +36,16 @@ function RouteComponent() {
                 <header
                     className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear">
                     <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-                        <SidebarTrigger className="-ml-1"/>
+                        <SidebarTrigger />
                         <Separator
                             orientation="vertical"
                             className="mx-2 data-[orientation=vertical]:h-4"
                         />
-                        <h1 className="text-base font-medium">Dashboard</h1>
+                        <h1 className="text-base font-medium">Your Company</h1>
+                    </div>
+                    <NotificationBox/>
+                    <div  className="mr-2">
+                        <NavUser user={data.user}/>
                     </div>
                 </header>
                 <div className="m-4">

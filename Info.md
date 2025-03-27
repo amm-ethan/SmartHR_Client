@@ -14,7 +14,7 @@ This is a complete HR system that allows you to manage your employees.
 
 - Employee management
     1. Employee profiles with personal & professional details
-    2. Employee ID, contact info, job title, department
+    2. Employee ID, contact info (permanent, period, intern), job title, department
     3. Organization Structure
     4. Department Assignment
     5. Work history & experience

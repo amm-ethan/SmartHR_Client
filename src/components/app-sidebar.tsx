@@ -17,13 +17,12 @@ import {
     Radio,
     UserCog,
     SettingsIcon,
-    SearchIcon,
+    Feather
 
 } from "lucide-react"
 
 import {NavMain} from "@/components/nav-main"
 import {NavProjects} from "@/components/nav-projects"
-import {NavUser} from "@/components/nav-user"
 import {
     Sidebar,
     SidebarContent,
@@ -131,7 +130,7 @@ const data = {
             ],
         },
         {
-            title: "OT Mgmt",
+            title: "Overtime",
             url: "#",
             icon: BellElectric,
             items: [
@@ -217,7 +216,7 @@ const data = {
             icon: PartyPopper,
         },
         {
-            name: "Documents Mgmt",
+            name: "Documents",
             url: "#",
             icon: Library,
         },
@@ -234,9 +233,9 @@ const data = {
     ],
     navSecondary: [
         {
-            title: "Search",
-            url: "#",
-            icon: SearchIcon,
+            title: "Access Logs",
+            url: "/access-logs",
+            icon: Feather,
         },
         {
             title: "Access Management",
@@ -263,7 +262,8 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
                                     className="items-center justify-center">
                                     <img src="/assets/logo.ico" alt="smart logo" width="32" height="32"/>
                                 </div>
-                                <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                                <div
+                                    className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                                     <span className="truncate font-semibold">
                                         Smart HR
                                     </span>
@@ -276,10 +276,9 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
             <SidebarContent>
                 <NavMain items={data.navMain}/>
                 <NavProjects projects={data.projects}/>
-                <NavSecondary items={data.navSecondary} className="mt-auto"/>
             </SidebarContent>
-            <SidebarFooter>
-                <NavUser user={data.user}/>
+            <SidebarFooter className="px-0">
+                <NavSecondary items={data.navSecondary} className="mt-auto"/>
             </SidebarFooter>
         </Sidebar>
     )

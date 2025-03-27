@@ -17,7 +17,7 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
-import {Link} from "@tanstack/react-router";
+import {Link, useMatchRoute} from "@tanstack/react-router";
 
 export function NavMain({items,}: {
     items: {
@@ -31,6 +31,7 @@ export function NavMain({items,}: {
         }[]
     }[]
 }) {
+    const matchRoute = useMatchRoute();
     return (
         <SidebarGroup>
             <SidebarGroupLabel>Employee Management</SidebarGroupLabel>
@@ -44,7 +45,12 @@ export function NavMain({items,}: {
                     >
                         <SidebarMenuItem>
                             <CollapsibleTrigger asChild>
-                                <SidebarMenuButton tooltip={item.title}>
+                                <SidebarMenuButton tooltip={item.title}
+                                                   className={
+                                                       `${matchRoute({to: item.url})
+                                                           ? 'bg-sidebar-accent '
+                                                           : ''}
+                                                           \`}`}>
                                     {item.icon && <item.icon/>}
                                     <span>{item.title}</span>
                                     <ChevronRight
