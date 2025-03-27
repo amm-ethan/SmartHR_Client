@@ -2,13 +2,23 @@
 
 import * as React from "react"
 import {
-    BookOpen,
-    Bot,
-    Frame,
-    Map,
-    PieChart,
-    Settings2,
-    SquareTerminal,
+    LayoutDashboard,
+    Watch,
+    Users,
+    UserSearch,
+    Handshake,
+    BellElectric,
+    Presentation,
+    Gauge,
+    Scroll,
+    CalendarDays,
+    PartyPopper,
+    Library,
+    Radio,
+    UserCog,
+    SettingsIcon,
+    SearchIcon,
+
 } from "lucide-react"
 
 import {NavMain} from "@/components/nav-main"
@@ -21,41 +31,21 @@ import {
     SidebarHeader, SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    SidebarRail,
 } from "@/components/ui/sidebar.tsx"
+import {NavSecondary} from "@/components/nav-secondary.tsx";
 
 
 const data = {
     user: {
         name: "admin",
         email: "admin@example.com",
-        avatar: "public/avatars/avatar.png",
+        avatar: "/avatars/avatar.png",
     },
     navMain: [
         {
-            title: "Playground",
-            url: "#",
-            icon: SquareTerminal,
-            isActive: true,
-            items: [
-                {
-                    title: "History",
-                    url: "#",
-                },
-                {
-                    title: "Starred",
-                    url: "#",
-                },
-                {
-                    title: "Settings",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Models",
-            url: "#",
-            icon: Bot,
+            title: "Leave & Attendance",
+            url: "/APPLe",
+            icon: Watch,
             items: [
                 {
                     title: "Genesis",
@@ -72,9 +62,9 @@ const data = {
             ],
         },
         {
-            title: "Documentation",
+            title: "Employee Database",
             url: "#",
-            icon: BookOpen,
+            icon: Users,
             items: [
                 {
                     title: "Introduction",
@@ -95,9 +85,101 @@ const data = {
             ],
         },
         {
-            title: "Settings",
+            title: "Recruitment",
             url: "#",
-            icon: Settings2,
+            icon: UserSearch,
+            items: [
+                {
+                    title: "General",
+                    url: "#",
+                },
+                {
+                    title: "Team",
+                    url: "#",
+                },
+                {
+                    title: "Billing",
+                    url: "#",
+                },
+                {
+                    title: "Limits",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "Onboarding",
+            url: "#",
+            icon: Handshake,
+            items: [
+                {
+                    title: "General",
+                    url: "#",
+                },
+                {
+                    title: "Team",
+                    url: "#",
+                },
+                {
+                    title: "Billing",
+                    url: "#",
+                },
+                {
+                    title: "Limits",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "OT Mgmt",
+            url: "#",
+            icon: BellElectric,
+            items: [
+                {
+                    title: "General",
+                    url: "#",
+                },
+                {
+                    title: "Team",
+                    url: "#",
+                },
+                {
+                    title: "Billing",
+                    url: "#",
+                },
+                {
+                    title: "Limits",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "T&D",
+            url: "#",
+            icon: Presentation,
+            items: [
+                {
+                    title: "General",
+                    url: "#",
+                },
+                {
+                    title: "Team",
+                    url: "#",
+                },
+                {
+                    title: "Billing",
+                    url: "#",
+                },
+                {
+                    title: "Limits",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "KPI",
+            url: "#",
+            icon: Gauge,
             items: [
                 {
                     title: "General",
@@ -120,19 +202,51 @@ const data = {
     ],
     projects: [
         {
-            name: "Design Engineering",
-            url: "#",
-            icon: Frame,
+            name: "Dashboard",
+            url: "/dashboard",
+            icon: LayoutDashboard,
         },
         {
-            name: "Sales & Marketing",
+            name: "Report & Analytics",
             url: "#",
-            icon: PieChart,
+            icon: Scroll,
         },
         {
-            name: "Travel",
+            name: "Event Planning",
             url: "#",
-            icon: Map,
+            icon: PartyPopper,
+        },
+        {
+            name: "Documents Mgmt",
+            url: "#",
+            icon: Library,
+        },
+        {
+            name: "Calender",
+            url: "#",
+            icon: CalendarDays,
+        },
+        {
+            name: "Broadcasting",
+            url: "#",
+            icon: Radio,
+        },
+    ],
+    navSecondary: [
+        {
+            title: "Search",
+            url: "#",
+            icon: SearchIcon,
+        },
+        {
+            title: "Access Management",
+            url: "#",
+            icon: UserCog,
+        },
+        {
+            title: "Settings",
+            url: "#",
+            icon: SettingsIcon,
         },
     ],
 }
@@ -144,17 +258,17 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
                 <SidebarHeader className="px-0 pl-1">
                     <SidebarMenu>
                         <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" className="hover:bg-transparent">
-                            <div
-                                className="size-8 items-center justify-center">
-                                <img src="public/assets/xenoptics.ico" alt="xenoptics logo"/>
-                            </div>
-                            <div className="grid flex-1 text-left text-sm leading-tight">
+                            <SidebarMenuButton size="lg">
+                                <div
+                                    className="size-8 items-center justify-center">
+                                    <img src="/assets/xenoptics.ico" alt="xenoptics logo"/>
+                                </div>
+                                <div className="grid flex-1 text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
                                         Xenoptics Ltd.
                                     </span>
-                            </div>
-                        </SidebarMenuButton>
+                                </div>
+                            </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarHeader>
@@ -162,11 +276,11 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
             <SidebarContent>
                 <NavMain items={data.navMain}/>
                 <NavProjects projects={data.projects}/>
+                <NavSecondary items={data.navSecondary} className="mt-auto"/>
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user}/>
             </SidebarFooter>
-            <SidebarRail/>
         </Sidebar>
     )
 }
