@@ -1,5 +1,5 @@
 import {createFileRoute} from '@tanstack/react-router'
-import {useState, useCallback, useEffect} from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import {
     ReactFlow,
     Controls,
@@ -7,13 +7,13 @@ import {
     useNodesState,
     useEdgesState,
     ConnectionMode,
-    Panel,
+    Handle, Position,
 } from '@xyflow/react';
-import type { Node, Edge, NodeTypes } from '@xyflow/react';
+import type {Node, Edge} from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import {Card, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Pencil, Plus, ZoomIn, ZoomOut, Move} from "lucide-react";
+import {Plus,} from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -37,32 +37,35 @@ interface OrgNode {
     children: OrgNode[];
 }
 
-interface CustomNodeData extends Record<string, unknown> {
+
+interface EmployeeNodeData extends Record<string, unknown> {
     name: string;
     title: string;
     image?: string;
 }
 
-type CustomNode = Node<CustomNodeData>;
-type CustomEdge = Edge;
 
 // Custom node component
-function CustomNode({data}: {data: {name: string; title: string; image?: string}}) {
+function CustomNode({data}: { data: { name: string; title: string; image?: string } }) {
     return (
-        <Card className="w-[160px] sm:w-[200px] border-2">
-            <CardHeader className="p-2 sm:p-4">
-                <div className="flex items-center gap-2 sm:gap-3">
-                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
-                        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${data.name}`}/>
-                        <AvatarFallback>{data.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                        <CardTitle className="text-xs sm:text-sm font-medium truncate">{data.name}</CardTitle>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{data.title}</p>
+        <>
+            <Handle type="target" position={Position.Top}/>
+            <Card className="w-[160px] sm:w-[200px] border-2">
+                <CardHeader className="p-2 sm:p-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
+                            <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${data.name}`}/>
+                            <AvatarFallback>{data.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                            <CardTitle className="text-xs sm:text-sm font-medium truncate">{data.name}</CardTitle>
+                            <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{data.title}</p>
+                        </div>
                     </div>
-                </div>
-            </CardHeader>
-        </Card>
+                </CardHeader>
+            </Card>
+            <Handle type="source" position={Position.Bottom} />
+        </>
     );
 }
 
@@ -121,7 +124,10 @@ const initialOrgStructure: OrgNode = {
 };
 
 // Convert org structure to React Flow nodes and edges
-function convertOrgStructureToFlow(orgStructure: OrgNode, parentX = 0, level = 0, nodes: Node[] = [], edges: Edge[] = []): {nodes: Node[]; edges: Edge[]} {
+function convertOrgStructureToFlow(orgStructure: OrgNode, parentX = 0, level = 0, nodes: Node[] = [], edges: Edge[] = []): {
+    nodes: Node[];
+    edges: Edge[]
+} {
     // Responsive node dimensions and spacing
     const nodeWidth = typeof window !== 'undefined' && window.innerWidth < 640 ? 160 : 200;
     const nodeHeight = typeof window !== 'undefined' && window.innerWidth < 640 ? 70 : 90;
@@ -148,7 +154,7 @@ function convertOrgStructureToFlow(orgStructure: OrgNode, parentX = 0, level = 0
     // Process children
     orgStructure.children.forEach((child, index) => {
         const childX = startX + index * (nodeWidth + horizontalSpacing);
-        
+
         // Create edge from parent to child
         edges.push({
             id: `${orgStructure.id}-${child.id}`,
@@ -160,7 +166,6 @@ function convertOrgStructureToFlow(orgStructure: OrgNode, parentX = 0, level = 0
         // Recursively process child nodes
         convertOrgStructureToFlow(child, childX, level + 1, nodes, edges);
     });
-
     return {nodes, edges};
 }
 
@@ -172,13 +177,13 @@ function RouteComponent() {
     const [newEmployee, setNewEmployee] = useState({name: '', title: ''});
 
     // React Flow states
-    const [nodes, setNodes, onNodesChange] = useNodesState<Node<CustomNodeData>>([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState<Node<EmployeeNodeData>>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
     // Update flow when org structure changes
     useEffect(() => {
         const flowData = convertOrgStructureToFlow(orgStructure);
-        setNodes(flowData.nodes as Node<CustomNodeData>[]);
+        setNodes(flowData.nodes as Node<EmployeeNodeData>[]);
         setEdges(flowData.edges as Edge[]);
     }, [orgStructure, setNodes, setEdges]);
 
@@ -235,7 +240,7 @@ function RouteComponent() {
         setIsAddDialogOpen(false);
     };
 
-    const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    const onNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
         const findNode = (tree: OrgNode, id: string): OrgNode | null => {
             if (tree.id === id) return tree;
             for (const child of tree.children) {
@@ -268,7 +273,7 @@ function RouteComponent() {
                         className="text-xs sm:text-sm"
                     >
                         <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2"/>
-                        Add Report
+                        Add Node
                     </Button>
                 </div>
             </div>
@@ -288,7 +293,7 @@ function RouteComponent() {
                     attributionPosition="bottom-left"
                 >
                     <Background/>
-                    <Controls 
+                    <Controls
                         className="!left-2 !bottom-2 sm:!left-4 sm:!bottom-4"
                         showInteractive={false}
                     />
@@ -337,14 +342,14 @@ function RouteComponent() {
                         </div>
                     )}
                     <DialogFooter>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             onClick={() => setIsEditDialogOpen(false)}
                             className="text-xs sm:text-sm"
                         >
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             onClick={handleEditNode}
                             className="text-xs sm:text-sm"
                         >
@@ -394,14 +399,14 @@ function RouteComponent() {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             onClick={() => setIsAddDialogOpen(false)}
                             className="text-xs sm:text-sm"
                         >
                             Cancel
                         </Button>
-                        <Button 
+                        <Button
                             onClick={handleAddNode}
                             className="text-xs sm:text-sm"
                         >
