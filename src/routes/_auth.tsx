@@ -34,7 +34,7 @@ function RouteComponent() {
             <AppSidebar variant="inset"/>
             <SidebarInset>
                 <header
-                    className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear">
+                    className="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 md:h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear">
                     <div className="flex w-full items-center gap-1 mx-4 lg:gap-2 lg:px-6">
                         <SidebarTrigger/>
                         <Separator
@@ -48,7 +48,7 @@ function RouteComponent() {
                         <NavUser user={data.user}/>
                     </div>
                 </header>
-                <div className="m-4">
+                <div className="p-8">
                     <Outlet/>
                 </div>
             </SidebarInset>

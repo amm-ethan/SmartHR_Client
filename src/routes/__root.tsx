@@ -8,7 +8,6 @@ export const Route = createRootRoute({
             <div className="relative min-h-svh">
                 <Outlet/>
             </div>
-
             <TanStackRouterDevtools position={"bottom-right"}/>
         </>
     ),

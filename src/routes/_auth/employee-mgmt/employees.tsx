@@ -20,6 +20,7 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Label} from "@/components/ui/label.tsx";
+import MainLayout from "@/components/main-layout.tsx";
 
 export const Route = createFileRoute('/_auth/employee-mgmt/employees')({
     component: RouteComponent,
@@ -54,11 +55,11 @@ function RouteComponent() {
     };
 
     return (
-        <div className="container mx-auto p-4 space-y-4">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold">Employee Management</h1>
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <div className="relative flex-1 sm:flex-initial">
+        <MainLayout
+            title="Employee Management"
+            headerChildren={
+                <>
+                    <div className="relative w-full lg:w-1/4">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"/>
                         <Input
                             placeholder="Search employees..."
@@ -67,25 +68,27 @@ function RouteComponent() {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    <Select
-                        value={selectedDepartment}
-                        onValueChange={(value) => setSelectedDepartment(value as Department | 'all')}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Department"/>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All Departments</SelectItem>
-                            {DEPARTMENTS.map((dept) => (
-                                <SelectItem key={dept} value={dept}>
-                                    {dept}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-            </div>
-
+                    <div className="w-full lg:w-1/4">
+                        <Select
+                            value={selectedDepartment}
+                            onValueChange={(value) => setSelectedDepartment(value as Department | 'all')}
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Department"/>
+                            </SelectTrigger>
+                            <SelectContent className="min-w-0">
+                                <SelectItem value="all">All Departments</SelectItem>
+                                {DEPARTMENTS.map((dept) => (
+                                    <SelectItem key={dept} value={dept}>
+                                        {dept}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </>
+            }
+        >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 {/* Employee List */}
                 <Card className="lg:col-span-4">
@@ -134,14 +137,14 @@ function RouteComponent() {
                 <Card className="lg:col-span-8">
                     <CardContent className="p-6">
                         {selectedEmployee ? (
-                            <div className="flex flex-row justify-between">
-                                <Tabs defaultValue="details" className="space-y-4">
-                                    <TabsList>
+                            <div className="flex flex-row md:flex-col-reverse md:gap-2 xl:flex-row justify-between">
+                                <Tabs defaultValue="details" className="space-y-4 min-w-[40svw]">
+                                    <TabsList className="md:w-full">
                                         <TabsTrigger value="details">Details</TabsTrigger>
                                         <TabsTrigger value="work-history">Work History</TabsTrigger>
                                         <TabsTrigger value="documents">Documents</TabsTrigger>
                                     </TabsList>
-                                    <TabsContent value="details" className="space-y-6">
+                                    <TabsContent value="details" className="space-y-4">
                                         <div className="flex items-start gap-4">
                                             <Avatar className="w-20 h-20">
                                                 <AvatarImage src={selectedEmployee.profileImage}/>
@@ -160,8 +163,7 @@ function RouteComponent() {
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="grid grid-cols gap-4">
                                             <Card>
                                                 <CardHeader>
                                                     <CardTitle>Contact Information</CardTitle>
@@ -235,10 +237,11 @@ function RouteComponent() {
                                         ))}
                                     </TabsContent>
                                 </Tabs>
-                                <div className="flex gap-2">
+                                <div className="flex flex-col gap-2">
                                     <Button
                                         variant="outline"
                                         size="sm"
+                                        className="w-full"
                                         onClick={() => {
                                             setEditingEmployee(selectedEmployee);
                                             setIsEditDialogOpen(true);
@@ -250,6 +253,7 @@ function RouteComponent() {
                                     <Button
                                         variant="outline"
                                         size="sm"
+                                        className="w-full"
                                         onClick={() => {
                                             setEditingEmployee(selectedEmployee);
                                             setIsEditDialogOpen(true);
@@ -356,6 +360,8 @@ function RouteComponent() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div>
-    );
+        </MainLayout>
+
+    )
+        ;
 }
