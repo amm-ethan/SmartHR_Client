@@ -137,33 +137,59 @@ function RouteComponent() {
                 <Card className="lg:col-span-8">
                     <CardContent className="p-6">
                         {selectedEmployee ? (
-                            <div className="flex flex-row md:flex-col-reverse md:gap-2 xl:flex-row justify-between">
-                                <Tabs defaultValue="details" className="space-y-4 min-w-[40svw]">
-                                    <TabsList className="md:w-full">
+                            <div className="flex flex-col justify-center gap-4">
+                                <div className="flex items-center justify-center ">
+                                    <Avatar className="w-20 h-20">
+                                        <AvatarImage src={selectedEmployee.profileImage}/>
+                                        <AvatarFallback className="text-xl">
+                                            {selectedEmployee.firstName[0]}
+                                            {selectedEmployee.lastName[0]}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="space-y-1">
+                                        <h2 className="text-2xl font-bold">
+                                            {selectedEmployee.firstName} {selectedEmployee.lastName}
+                                        </h2>
+                                        <div className="flex items-center gap-2 text-muted-foreground">
+                                            <Briefcase className="h-4 w-4"/>
+                                            {selectedEmployee.jobTitle}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col lg:flex-row gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="min-w-1/2"
+                                        onClick={() => {
+                                            setEditingEmployee(selectedEmployee);
+                                            setIsEditDialogOpen(true);
+                                        }}
+                                    >
+                                        <Pencil className="h-4 w-4 mr-2"/>
+                                        Edit
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="min-w-1/2"
+                                        onClick={() => {
+                                            setEditingEmployee(selectedEmployee);
+                                            setIsEditDialogOpen(true);
+                                        }}
+                                    >
+                                        <FileUp className="h-4 w-4 mr-2"/>
+                                        Upload Documents
+                                    </Button>
+                                </div>
+                                <Tabs defaultValue="details" className="space-y-4 w-full">
+                                    <TabsList className="w-full">
                                         <TabsTrigger value="details">Details</TabsTrigger>
                                         <TabsTrigger value="work-history">Work History</TabsTrigger>
                                         <TabsTrigger value="documents">Documents</TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="details" className="space-y-4">
-                                        <div className="flex items-start gap-4">
-                                            <Avatar className="w-20 h-20">
-                                                <AvatarImage src={selectedEmployee.profileImage}/>
-                                                <AvatarFallback className="text-xl">
-                                                    {selectedEmployee.firstName[0]}
-                                                    {selectedEmployee.lastName[0]}
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            <div className="space-y-1">
-                                                <h2 className="text-2xl font-bold">
-                                                    {selectedEmployee.firstName} {selectedEmployee.lastName}
-                                                </h2>
-                                                <div className="flex items-center gap-2 text-muted-foreground">
-                                                    <Briefcase className="h-4 w-4"/>
-                                                    {selectedEmployee.jobTitle}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols gap-4">
+                                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                                             <Card>
                                                 <CardHeader>
                                                     <CardTitle>Contact Information</CardTitle>
@@ -198,71 +224,50 @@ function RouteComponent() {
                                         </div>
                                     </TabsContent>
                                     <TabsContent value="work-history" className="space-y-4">
-                                        {selectedEmployee.workHistory.map((history) => (
-                                            <Card key={history.id}>
-                                                <CardHeader>
-                                                    <CardTitle>{history.position}</CardTitle>
-                                                    <CardDescription>{history.company}</CardDescription>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <div className="text-sm text-muted-foreground">
-                                                        {new Date(history.startDate).toLocaleDateString()} -{' '}
-                                                        {history.endDate
-                                                            ? new Date(history.endDate).toLocaleDateString()
-                                                            : 'Present'}
-                                                    </div>
-                                                    <p className="mt-2">{history.description}</p>
-                                                </CardContent>
-                                            </Card>
-                                        ))}
+                                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                                            {selectedEmployee.workHistory.map((history) => (
+                                                <Card key={history.id}>
+                                                    <CardHeader>
+                                                        <CardTitle>{history.position}</CardTitle>
+                                                        <CardDescription>{history.company}</CardDescription>
+                                                    </CardHeader>
+                                                    <CardContent>
+                                                        <div className="text-sm text-muted-foreground">
+                                                            {new Date(history.startDate).toLocaleDateString()} -{' '}
+                                                            {history.endDate
+                                                                ? new Date(history.endDate).toLocaleDateString()
+                                                                : 'Present'}
+                                                        </div>
+                                                        <p className="mt-2">{history.description}</p>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
+                                        </div>
                                     </TabsContent>
                                     <TabsContent value="documents" className="space-y-4">
-                                        {selectedEmployee.documents.map((document) => (
-                                            <Card key={document.id}>
-                                                <CardHeader
-                                                    className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                                    <div className="space-y-1">
-                                                        <CardTitle>{document.name}</CardTitle>
-                                                        <CardDescription>
-                                                            Uploaded
-                                                            on {new Date(document.uploadDate).toLocaleDateString()}
-                                                        </CardDescription>
-                                                    </div>
-                                                    <Button variant="outline" size="sm">
-                                                        <FileText className="h-4 w-4 mr-2"/>
-                                                        View
-                                                    </Button>
-                                                </CardHeader>
-                                            </Card>
-                                        ))}
+                                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                                            {selectedEmployee.documents.map((document) => (
+                                                <Card key={document.id}>
+                                                    <CardHeader
+                                                        className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                                        <div className="space-y-1">
+                                                            <CardTitle>{document.name}</CardTitle>
+                                                            <CardDescription>
+                                                                Uploaded
+                                                                on {new Date(document.uploadDate).toLocaleDateString()}
+                                                            </CardDescription>
+                                                        </div>
+                                                        <Button variant="outline" size="sm">
+                                                            <FileText className="h-4 w-4 mr-2"/>
+                                                            View
+                                                        </Button>
+                                                    </CardHeader>
+                                                </Card>
+                                            ))}
+                                        </div>
                                     </TabsContent>
                                 </Tabs>
-                                <div className="flex flex-col gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="w-full"
-                                        onClick={() => {
-                                            setEditingEmployee(selectedEmployee);
-                                            setIsEditDialogOpen(true);
-                                        }}
-                                    >
-                                        <Pencil className="h-4 w-4 mr-2"/>
-                                        Edit
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="w-full"
-                                        onClick={() => {
-                                            setEditingEmployee(selectedEmployee);
-                                            setIsEditDialogOpen(true);
-                                        }}
-                                    >
-                                        <FileUp className="h-4 w-4 mr-2"/>
-                                        Upload Documents
-                                    </Button>
-                                </div>
+
                             </div>
                         ) : (
                             <div
@@ -338,10 +343,10 @@ function RouteComponent() {
                                         })
                                     }
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select department"/>
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="min-w-0">
                                         {DEPARTMENTS.map((dept) => (
                                             <SelectItem key={dept} value={dept}>
                                                 {dept}
