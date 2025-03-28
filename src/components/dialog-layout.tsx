@@ -1,19 +1,19 @@
 import React from "react";
-import {Dialog, DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog.tsx";
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog.tsx";
 
 interface DialogLayoutProps {
     title?: React.ReactNode;
-    dialogTrigger?: React.ReactNode;
     children?: React.ReactNode;
-
+    footerChildren?: React.ReactNode;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }
 
 export default function DialogLayout(
-    {title, dialogTrigger, children,}: DialogLayoutProps
+    {title, children, footerChildren, open, onOpenChange}: DialogLayoutProps
 ) {
     return (
-        <Dialog>
-            {dialogTrigger}
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className={"w-md overflow-y-auto max-h-screen"}>
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
@@ -23,6 +23,9 @@ export default function DialogLayout(
                 <div className="space-y-4 sm:space-y-6 py-4">
                     {children}
                 </div>
+                <DialogFooter>
+                    {footerChildren}
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

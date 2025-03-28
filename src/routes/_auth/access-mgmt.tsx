@@ -1,7 +1,6 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {Lock, Mail, Pencil, PlusIcon, Shield, Trash, UserPlus} from "lucide-react";
 import React, {useState} from "react";
-import {DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import {Input} from "@/components/ui/input.tsx";
@@ -32,8 +31,9 @@ const RoleIcon = {
 function RouteComponent() {
     const [users, setUsers] = useState<User[]>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    // @ts-ignore
-    const [isEditMode, setIsEditMode] = useState(false);
+
+    const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
     const [newUser, setNewUser] = useState({
         email: "",
@@ -49,6 +49,7 @@ function RouteComponent() {
         };
         setUsers([...users, user]);
         setNewUser({email: "", password: "", roles: []});
+        setIsCreateDialogOpen(false);
     };
 
     const handleUpdateUser = () => {
@@ -59,7 +60,7 @@ function RouteComponent() {
         setUsers(updatedUsers);
 
         setSelectedUser(null);
-        setIsEditMode(false);
+        setIsEditDialogOpen(false);
     };
 
     const handleDeleteUser = (id: string) => {
@@ -71,19 +72,99 @@ function RouteComponent() {
 
     return (
         <MainLayout title="User Access Management" className="lg:max-w-5xl" headerChildren={
-            <DialogLayout dialogTrigger={
-                <DialogTrigger asChild>
-                    <Button size="default" className="w-full sm:w-auto shadow-sm">
-                        <PlusIcon className="h-4 w-4 mr-2"/>
-                        Add New User
-                    </Button>
-                </DialogTrigger>
-            } title={
-                <>
-                    <UserPlus className="h-5 w-5"/>
-                    Create New User
-                </>
-            }
+            <Button size="default" className="w-full sm:w-auto shadow-sm"
+                    onClick={() => {
+                        setIsCreateDialogOpen(true);
+                    }}
+            >
+                <PlusIcon className="h-4 w-4 mr-2"/>
+                Add New User
+            </Button>
+        }>
+            <div className="grid grid-cols gap-4">
+                <div className="rounded-lg border overflow-x-auto">
+                    <table className="w-full min-w-[600px]">
+                        <thead>
+                        <tr className="bg-muted/50 border-b">
+                            <th className="text-left font-medium text-muted-foreground p-3 sm:p-4">Email</th>
+                            <th className="text-left font-medium text-muted-foreground p-3 sm:p-4">Roles</th>
+                            <th className="text-right font-medium text-muted-foreground p-3 sm:p-4">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                        {users.map((user) => (
+                            <tr key={user.id} className="bg-card hover:bg-muted/50 transition-colors">
+                                <td className="p-3 sm:p-4">
+                                    <div className="flex items-center gap-2">
+                                        <Mail className="h-4 w-4 text-muted-foreground"/>
+                                        <span className="truncate">{user.email}</span>
+                                    </div>
+                                </td>
+                                <td className="p-3 sm:p-4">
+                                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                                        {user.roles.map((role) => (
+                                            <span
+                                                key={role}
+                                                className="inline-flex items-center gap-1 sm:gap-1.5 rounded-md bg-primary/10 px-2 sm:px-2.5 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary"
+                                            >
+                                                    {React.createElement(RoleIcon[role as keyof typeof RoleIcon], {className: "h-3 w-3 sm:h-3.5 sm:w-3.5"})}
+                                                {role}
+                                                </span>
+                                        ))}
+                                    </div>
+                                </td>
+                                <td className="p-3 sm:p-4">
+                                    <div className="flex justify-end gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                setSelectedUser(user);
+                                                setIsEditDialogOpen(true);
+                                            }}
+                                        >
+                                            <Pencil className="h-4 w-4"/>
+                                        </Button>
+                                        <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            className="shadow-sm"
+                                            onClick={() => handleDeleteUser(user.id)}
+                                        >
+                                            <Trash className="h-4 w-4"/>
+                                        </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                        {users.length === 0 && (
+                            <tr>
+                                <td colSpan={3} className="p-4 text-center text-muted-foreground">
+                                    No users found. Click "Add New User" to create one.
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {/* Edit Employee Dialog */}
+            <DialogLayout
+                open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}
+                title={
+                    <>
+                        <UserPlus className="h-5 w-5"/>
+                        Create New User
+                    </>
+                }
+                footerChildren={
+                    <>
+                        <Button className="w-full shadow-sm" onClick={handleCreateUser}>
+                            Create User
+                        </Button>
+                    </>
+                }
             >
                 <>
                     <div className="space-y-2">
@@ -147,156 +228,89 @@ function RouteComponent() {
                             ))}
                         </div>
                     </div>
-                    <Button className="w-full shadow-sm" onClick={handleCreateUser}>
-                        Create User
-                    </Button>
                 </>
             </DialogLayout>
 
-        }>
-            <div className="grid grid-cols gap-4">
-                <div className="rounded-lg border overflow-x-auto">
-                    <table className="w-full min-w-[600px]">
-                        <thead>
-                        <tr className="bg-muted/50 border-b">
-                            <th className="text-left font-medium text-muted-foreground p-3 sm:p-4">Email</th>
-                            <th className="text-left font-medium text-muted-foreground p-3 sm:p-4">Roles</th>
-                            <th className="text-right font-medium text-muted-foreground p-3 sm:p-4">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                        {users.map((user) => (
-                            <tr key={user.id} className="bg-card hover:bg-muted/50 transition-colors">
-                                <td className="p-3 sm:p-4">
-                                    <div className="flex items-center gap-2">
-                                        <Mail className="h-4 w-4 text-muted-foreground"/>
-                                        <span className="truncate">{user.email}</span>
-                                    </div>
-                                </td>
-                                <td className="p-3 sm:p-4">
-                                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                                        {user.roles.map((role) => (
-                                            <span
-                                                key={role}
-                                                className="inline-flex items-center gap-1 sm:gap-1.5 rounded-md bg-primary/10 px-2 sm:px-2.5 py-1 sm:py-1.5 text-xs sm:text-sm font-medium text-primary"
-                                            >
-                                                    {React.createElement(RoleIcon[role as keyof typeof RoleIcon], {className: "h-3 w-3 sm:h-3.5 sm:w-3.5"})}
+            {/* Update Employee Dialog */}
+            <DialogLayout
+                open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}
+                title={
+                    <>
+                        <Pencil className="h-5 w-5"/>
+                        Edit User
+                    </>
+                }
+                footerChildren={
+                    <>
+                        <Button className="w-full shadow-sm"
+                                onClick={handleUpdateUser}>
+                            Update User
+                        </Button>
+                    </>
+                }
+            >
+                <>
+                    {selectedUser && (
+                        <>
+                            <div className="space-y-2">
+                                <Label htmlFor="edit-email"
+                                       className="flex items-center gap-2">
+                                    <Mail className="h-4 w-4"/>
+                                    Email
+                                </Label>
+                                <Input
+                                    id="edit-email"
+                                    type="email"
+                                    value={selectedUser.email}
+                                    onChange={(e) =>
+                                        setSelectedUser({
+                                            ...selectedUser,
+                                            email: e.target.value,
+                                        })
+                                    }
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <Label className="flex items-center gap-2">
+                                    <Shield className="h-4 w-4"/>
+                                    Roles
+                                </Label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    {ROLES.map((role) => (
+                                        <div key={role}
+                                             className="flex items-center space-x-3 rounded-lg border p-3">
+                                            <Checkbox
+                                                id={`edit-${role}`}
+                                                checked={selectedUser.roles.includes(role)}
+                                                onCheckedChange={(checked: boolean) => {
+                                                    if (checked) {
+                                                        setSelectedUser({
+                                                            ...selectedUser,
+                                                            roles: [...selectedUser.roles, role],
+                                                        });
+                                                    } else {
+                                                        setSelectedUser({
+                                                            ...selectedUser,
+                                                            roles: selectedUser.roles.filter(
+                                                                (r) => r !== role
+                                                            ),
+                                                        });
+                                                    }
+                                                }}
+                                            />
+                                            <Label htmlFor={`edit-${role}`}
+                                                   className="flex items-center gap-2 cursor-pointer">
+                                                {React.createElement(RoleIcon[role as keyof typeof RoleIcon], {className: "h-4 w-4"})}
                                                 {role}
-                                                </span>
-                                        ))}
-                                    </div>
-                                </td>
-                                <td className="p-3 sm:p-4">
-                                    <div className="flex justify-end gap-2">
-                                        <DialogLayout dialogTrigger={
-                                            <DialogTrigger asChild>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        setSelectedUser(user);
-                                                        setIsEditMode(true);
-                                                    }}
-                                                >
-                                                    <Pencil className="h-4 w-4"/>
-                                                </Button>
-                                            </DialogTrigger>
-                                        } title={
-                                            <>
-                                                <Pencil className="h-5 w-5"/>
-                                                Edit User
-                                            </>
-                                        }
-                                        >
-                                            <>
-                                                {selectedUser && (
-                                                    <div className="space-y-4 sm:space-y-6 py-4">
-                                                        <div className="space-y-2">
-                                                            <Label htmlFor="edit-email"
-                                                                   className="flex items-center gap-2">
-                                                                <Mail className="h-4 w-4"/>
-                                                                Email
-                                                            </Label>
-                                                            <Input
-                                                                id="edit-email"
-                                                                type="email"
-                                                                value={selectedUser.email}
-                                                                onChange={(e) =>
-                                                                    setSelectedUser({
-                                                                        ...selectedUser,
-                                                                        email: e.target.value,
-                                                                    })
-                                                                }
-                                                            />
-                                                        </div>
-                                                        <div className="space-y-3">
-                                                            <Label className="flex items-center gap-2">
-                                                                <Shield className="h-4 w-4"/>
-                                                                Roles
-                                                            </Label>
-                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                                {ROLES.map((role) => (
-                                                                    <div key={role}
-                                                                         className="flex items-center space-x-3 rounded-lg border p-3">
-                                                                        <Checkbox
-                                                                            id={`edit-${role}`}
-                                                                            checked={selectedUser.roles.includes(role)}
-                                                                            onCheckedChange={(checked: boolean) => {
-                                                                                if (checked) {
-                                                                                    setSelectedUser({
-                                                                                        ...selectedUser,
-                                                                                        roles: [...selectedUser.roles, role],
-                                                                                    });
-                                                                                } else {
-                                                                                    setSelectedUser({
-                                                                                        ...selectedUser,
-                                                                                        roles: selectedUser.roles.filter(
-                                                                                            (r) => r !== role
-                                                                                        ),
-                                                                                    });
-                                                                                }
-                                                                            }}
-                                                                        />
-                                                                        <Label htmlFor={`edit-${role}`}
-                                                                               className="flex items-center gap-2 cursor-pointer">
-                                                                            {React.createElement(RoleIcon[role as keyof typeof RoleIcon], {className: "h-4 w-4"})}
-                                                                            {role}
-                                                                        </Label>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                        <Button className="w-full shadow-sm"
-                                                                onClick={handleUpdateUser}>
-                                                            Update User
-                                                        </Button>
-                                                    </div>
-                                                )}
-                                            </>
-                                        </DialogLayout>
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            className="shadow-sm"
-                                            onClick={() => handleDeleteUser(user.id)}
-                                        >
-                                            <Trash className="h-4 w-4"/>
-                                        </Button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {users.length === 0 && (
-                            <tr>
-                                <td colSpan={3} className="p-4 text-center text-muted-foreground">
-                                    No users found. Click "Add New User" to create one.
-                                </td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </>
+            </DialogLayout>
         </MainLayout>
     )
         ;

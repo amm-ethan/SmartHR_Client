@@ -11,16 +11,9 @@ import {ScrollArea} from "@/components/ui/scroll-area.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle
-} from "@/components/ui/dialog.tsx";
 import {Label} from "@/components/ui/label.tsx";
 import MainLayout from "@/components/main-layout.tsx";
+import DialogLayout from "@/components/dialog-layout.tsx";
 
 export const Route = createFileRoute('/_auth/employee-mgmt/employees')({
     component: RouteComponent,
@@ -280,91 +273,92 @@ function RouteComponent() {
             </div>
 
             {/* Edit Employee Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle>Edit Employee</DialogTitle>
-                        <DialogDescription>
-                            Make changes to the employee information below.
-                        </DialogDescription>
-                    </DialogHeader>
-                    {editingEmployee && (
-                        <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="firstName">First Name</Label>
-                                    <Input
-                                        id="firstName"
-                                        value={editingEmployee.firstName}
-                                        onChange={(e) =>
-                                            setEditingEmployee({
-                                                ...editingEmployee,
-                                                firstName: e.target.value,
-                                            })
-                                        }
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="lastName">Last Name</Label>
-                                    <Input
-                                        id="lastName"
-                                        value={editingEmployee.lastName}
-                                        onChange={(e) =>
-                                            setEditingEmployee({
-                                                ...editingEmployee,
-                                                lastName: e.target.value,
-                                            })
-                                        }
-                                    />
-                                </div>
-                            </div>
+            <DialogLayout open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}
+                          title={
+                              <>
+                                  <Pencil className="h-5 w-5"/>
+                                  Edit Employee Info
+                              </>
+                          }
+                          footerChildren={
+                              <>
+                                  <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                                      Cancel
+                                  </Button>
+                                  <Button onClick={handleEditSave}>Save Changes</Button>
+                              </>
+                          }
+            >
+                {editingEmployee && (
+                    <>
+                        <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="firstName">First Name</Label>
                                 <Input
-                                    id="email"
-                                    type="email"
-                                    value={editingEmployee.email}
+                                    id="firstName"
+                                    value={editingEmployee.firstName}
                                     onChange={(e) =>
                                         setEditingEmployee({
                                             ...editingEmployee,
-                                            email: e.target.value,
+                                            firstName: e.target.value,
                                         })
                                     }
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="department">Department</Label>
-                                <Select
-                                    value={editingEmployee.department}
-                                    onValueChange={(value) =>
+                                <Label htmlFor="lastName">Last Name</Label>
+                                <Input
+                                    id="lastName"
+                                    value={editingEmployee.lastName}
+                                    onChange={(e) =>
                                         setEditingEmployee({
                                             ...editingEmployee,
-                                            department: value as Department,
+                                            lastName: e.target.value,
                                         })
                                     }
-                                >
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select department"/>
-                                    </SelectTrigger>
-                                    <SelectContent className="min-w-0">
-                                        {DEPARTMENTS.map((dept) => (
-                                            <SelectItem key={dept} value={dept}>
-                                                {dept}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                />
                             </div>
                         </div>
-                    )}
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleEditSave}>Save Changes</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                value={editingEmployee.email}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        email: e.target.value,
+                                    })
+                                }
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="department">Department</Label>
+                            <Select
+                                value={editingEmployee.department}
+                                onValueChange={(value) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        department: value as Department,
+                                    })
+                                }
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select department"/>
+                                </SelectTrigger>
+                                <SelectContent className="min-w-0">
+                                    {DEPARTMENTS.map((dept) => (
+                                        <SelectItem key={dept} value={dept}>
+                                            {dept}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </>
+                )}
+            </DialogLayout>
         </MainLayout>
 
     )
